@@ -1,21 +1,24 @@
+
 package puzzle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class PuzzleState  implements Comparable<PuzzleState>{
-	protected PuzzleState parent;
-	protected ArrayList<PuzzleState> children;
+
+
+public class PuzzleStateH2  implements Comparable<PuzzleStateH2>{
+	protected PuzzleStateH2 parent;
+	protected ArrayList<PuzzleStateH2> children;
 	protected char [][] puzzleState;
 	protected int pathCost;
 	protected int heuristic;
 	protected int totalCost;
 
-	public PuzzleState () {
+	public PuzzleStateH2 () {
 		parent = null;
 		puzzleState = new char [3][3];
-		children = new ArrayList<PuzzleState>();
+		children = new ArrayList<PuzzleStateH2>();
 		pathCost = 0;
 		heuristic = 0;
 		totalCost = 0;
@@ -55,10 +58,10 @@ public class PuzzleState  implements Comparable<PuzzleState>{
 	public void setHeuristic(int heuristic) {
 		this.heuristic = heuristic;
 	}
-	public PuzzleState (PuzzleState p) {
+	public PuzzleStateH2 (PuzzleStateH2 p) {
 		this.parent = p;
 		puzzleState = new char [3][3];
-		children = new ArrayList<PuzzleState>();
+		children = new ArrayList<PuzzleStateH2>();
 		pathCost = 0;
 		heuristic = 0;
 		totalCost = 0;
@@ -84,30 +87,36 @@ public class PuzzleState  implements Comparable<PuzzleState>{
 		puzzleState[x1][y1] = puzzleState[x2][y2];
 		puzzleState[x2][y2] = temp;
 	}
-	public PuzzleState getParent() {
+	public PuzzleStateH2 getParent() {
 		return parent;
 	}
-	public void setParent(PuzzleState parent) {
+	public void setParent(PuzzleStateH2 parent) {
 		this.parent = parent;
 	}
 	public int calculateHeuristic () {
-		int misplaceTiles = 0;
-		int counter = 0;
+		int distance = 0;
+		int x, y;
+		String [] original = {"00", "01", "02", "10", "11", "12", "20", "21", "22"};
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (Character.getNumericValue(puzzleState[i][j]) != counter) {
-					misplaceTiles++;
-				}
-				counter++;
+				int num = Character.getNumericValue(puzzleState[i][j]);
+				char [] originalXY = original[num].toCharArray();
+				x = Character.getNumericValue(originalXY[0]);
+				y = Character.getNumericValue(originalXY[1]);
+				distance += Math.abs(x - i);
+				distance += Math.abs(y- j);
+				
 			}
 		}
-		return misplaceTiles;
+		
+		
+		return distance;
 	}
-	public boolean equals (PuzzleState other) {
+	public boolean equals (PuzzleStateH2 other) {
 		return this.totalCost == other.totalCost;
 	}
 	@Override
-	public int compareTo(PuzzleState other) {
+	public int compareTo(PuzzleStateH2 other) {
 		if (this.equals(other))
 			return 0;
 		else if (this.totalCost > other.totalCost) 
@@ -125,7 +134,6 @@ public class PuzzleState  implements Comparable<PuzzleState>{
 			}
 		}
 	}
-
 	public void printPuzzle () {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -149,16 +157,16 @@ public class PuzzleState  implements Comparable<PuzzleState>{
 	}
 	
 
-	public ArrayList<PuzzleState> expandNode() {
-		PuzzleState state1 = new PuzzleState(this);
+	public ArrayList<PuzzleStateH2> expandNode() {
+		PuzzleStateH2 state1 = new PuzzleStateH2(this);
 		state1.setParent(this);
-		PuzzleState state2 = new PuzzleState(this);
+		PuzzleStateH2 state2 = new PuzzleStateH2(this);
 		state2.setParent(this);
-		PuzzleState state3 = new PuzzleState(this);
+		PuzzleStateH2 state3 = new PuzzleStateH2(this);
 		state3.setParent(this);
-		PuzzleState state4 = new PuzzleState(this);
+		PuzzleStateH2 state4 = new PuzzleStateH2(this);
 		state4.setParent(this);
-		ArrayList<PuzzleState> newStates = new ArrayList<>();
+		ArrayList<PuzzleStateH2> newStates = new ArrayList<>();
 		pathCost = this.getPathCost() + 1;
 		
 		if (puzzleState[0][0] == '0') {
@@ -329,7 +337,6 @@ public class PuzzleState  implements Comparable<PuzzleState>{
 
 	
 	}
-
-
 	
 	
+

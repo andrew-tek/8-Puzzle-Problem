@@ -7,13 +7,12 @@ import java.util.Stack;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class PuzzleH1 {
-	protected PuzzleState head;
-	protected PuzzleStateH2 headH2;
-	protected PriorityQueue<PuzzleState> frontier;
+public class PuzzleH2 {
+	protected PuzzleStateH2 head;
+	protected PriorityQueue<PuzzleStateH2> frontier;
 	protected Set<String> stateSet;
-	protected Stack<PuzzleState> solutionSequence;
-	protected PuzzleState solution;
+	protected Stack<PuzzleStateH2> solutionSequence;
+	protected PuzzleStateH2 solution;
 	public int getNodesExpanded() {
 		return nodesExpanded;
 	}
@@ -22,14 +21,14 @@ public class PuzzleH1 {
 		this.nodesExpanded = nodesExpanded;
 	}
 
-	protected PuzzleStateH2 solutionH2;
+
 	protected int nodesExpanded;
 
-	public PriorityQueue<PuzzleState> getFrontier() {
+	public PriorityQueue<PuzzleStateH2> getFrontier() {
 		return frontier;
 	}
 
-	public void setFrontier(PriorityQueue<PuzzleState> frontier) {
+	public void setFrontier(PriorityQueue<PuzzleStateH2> frontier) {
 		this.frontier = frontier;
 	}
 
@@ -41,36 +40,35 @@ public class PuzzleH1 {
 		this.stateSet = stateSet;
 	}
 
-	public PuzzleH1() {
-		head = new PuzzleState();
+	public PuzzleH2() {
+		head = new PuzzleStateH2();
 		nodesExpanded = 0;
-		headH2 = new PuzzleStateH2();
-		frontier = new PriorityQueue<PuzzleState>();
+		head = new PuzzleStateH2();
+		frontier = new PriorityQueue<PuzzleStateH2>();
 		stateSet = new HashSet<String>();
-		solutionSequence = new Stack<PuzzleState>();
+		solutionSequence = new Stack<PuzzleStateH2>();
 	}
 
-	public PuzzleState getHead() {
+	public PuzzleStateH2 getHead() {
 		return head;
 	}
 
-	public void setHead(PuzzleState head) {
+	public void setHead(PuzzleStateH2 head) {
 		this.head = head;
 	}
 
 	public void solvePuzzle() {
-		PuzzleState currentNode;
-		ArrayList<PuzzleState> newStates;
+		PuzzleStateH2 currentNode;
+		ArrayList<PuzzleStateH2> newStates;
 		frontier.add(head);
 		while (!frontier.peek().toString().equals("012345678")) {
 			currentNode = frontier.peek();
-			// currentNode = new PuzzleState(frontier.peek());
 			if (stateSet.contains(currentNode.toString())) {
 				frontier.remove();
 			} else {
 				frontier.remove();
 				nodesExpanded++;
-				newStates = new ArrayList<PuzzleState>(currentNode.expandNode());
+				newStates = new ArrayList<PuzzleStateH2>(currentNode.expandNode());
 				stateSet.add(currentNode.toString());
 				for (int i = 0; i < newStates.size(); i++) {
 					frontier.add(newStates.get(i));
@@ -82,7 +80,7 @@ public class PuzzleH1 {
 	}
 
 	public void traceSolution() {
-		PuzzleState tempSol = solution;
+		PuzzleStateH2 tempSol = solution;
 		while (tempSol != null) {
 			solutionSequence.push(tempSol);
 			tempSol = tempSol.getParent();
@@ -100,15 +98,7 @@ public class PuzzleH1 {
 			System.out.println();
 			step++;
 		}
-		return step - 1;
+		return step;
 	}
 
 }
-
-
-
-
-
-
-
-
